@@ -1,5 +1,6 @@
 # Python implementation of Techmo TTS gRPC client.
 
+The `tts-client-python` can be used on the docker (a dedicated script to handle the docker image: `docker/run_tts_client_python.sh` runs in the bash shell) or directly as a python application (requires configuring the virtual environment first). Details are described below.
 
 
 ## Docker usage
@@ -51,16 +52,16 @@ Required Linux system-level packages:
 - python3-pip
 - libportaudio2
 
-Other required dependencies should be installed inside the virtual environment:
+To create the virtual environment and install other requirements, use script:
 
 ```
-virtualenv -p python3 .env
+./setup.sh
+```
+
+Then activate virtual environment:
+```
 source .env/bin/activate
-pip install -r requirements.txt
 ```
-
-This step only needs to be done the first time, for the further usage it is enough to use the existing virtual environment.
-
 
 #### Dependencies - Windows
 
@@ -76,7 +77,7 @@ then confirm your choice.
 Use Python 3 with virtual environment and install required packages (supported Python versions are: 3.6, 3.7, 3.8, 3.9):
 
 ```
-virtualenv -p python3 .env
+python3 -m venv .env
 .\.env\Scripts\activate
 pip install -r requirements.txt
 ```
@@ -206,23 +207,3 @@ Available options:
   --list-recordings VOICE_NAME
                         Lists all recording keys for the requested voice.
 ```
-
-
-Module:
-
-TTS Client can be used as a module for Python3. Package can be installed to the local environment using pip:
-```
-pip install -e .
-```
-This package provides modules `call_synthesize`, `call_listvoices`, `call_putlexicon`, `call_getlexicon`, `call_deletelexicon` and `call_listlexicons`, with functions with the same name, which run the client. Here are examples how to use them as a module:
-```
-from call_synthesize import call_synthesize
-call_synthesize(args, text)
-```
-
-```
-from call_listvoices import call_listvoices
-call_listvoices(args)
-```
-The `args` are a parsed command line arguments, and `text` is a request text to synthesize (either a plain text or SSML).
-Function parameters are described in usage section above.
