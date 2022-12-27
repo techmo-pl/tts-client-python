@@ -64,13 +64,16 @@ venv/
 ENV/
 venv.bak/
 
-# ignore files in directory `wav`
+# proto sources
+tts_client_python/proto/*
+
+# ignore files in directory `docker/wav`
 docker/wav/*
 
-# ignore files in directory `tls`
+# ignore files in directory `docker/tls`
 docker/tls/*
 
-# ignore files in directory `txt`
+# ignore files in directory `docker/txt`
 docker/txt/*
 
 # but keep the directories with .gitkeep file
