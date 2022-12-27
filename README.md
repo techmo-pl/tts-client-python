@@ -60,7 +60,7 @@ To create the virtual environment and install other requirements, use script:
 
 Then activate virtual environment:
 ```
-source .env/bin/activate
+source .venv/bin/activate
 ```
 
 #### Dependencies - Windows
@@ -77,8 +77,8 @@ then confirm your choice.
 Use Python 3 with virtual environment and install required packages (supported Python versions are: 3.6, 3.7, 3.8, 3.9):
 
 ```
-python3 -m venv .env
-.\.env\Scripts\activate
+python3 -m venv .venv
+.\.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -101,11 +101,11 @@ To build the sources from `.proto`, run:
 To run the TTS Client, activate the virtual environment first:
 - On Linux:
 ```
-source .env/bin/activate
+source .venv/bin/activate
 ```
 - On Windows:
 ```
-.\.env\Scripts\activate
+.\.venv\Scripts\activate
 ```
 Then run TTS Client. Sample use:
 
