@@ -1,0 +1,5 @@
+[build-system]
+# grpcio-tools 1.71.0+ ships protobuf 6.x which generates stubs requiring Python>=3.9.
+# Keep <1.71.0 so generated stubs stay compatible with Python 3.8 (protobuf 5.29.x).
+requires = ["setuptools", "grpcio-tools>=1.70.0,<1.71.0"]
+build-backend = "setuptools.build_meta"

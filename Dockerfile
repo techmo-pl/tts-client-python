@@ -1,15 +1,16 @@
-FROM python:3.6-slim
+FROM python:3.8-slim AS build-stage
 
-LABEL maintainer="<jan.wozniak@techmo.pl>"
 ARG DEBIAN_FRONTEND=noninteractive
+ENV PIP_ROOT_USER_ACTION=ignore
 
-ADD ./tts_client_python /tts_client/tts_client_python
-ADD ./requirements.txt setup.py README.md /tts_client/
+COPY submodules/tts-service-api /tts-client-python/submodules/tts-service-api
+COPY tts_client_python /tts-client-python/tts_client_python
+COPY setup.py pyproject.toml README.md /tts-client-python/
 
-WORKDIR /tts_client
+WORKDIR /tts-client-python
 
+# hadolint ignore=DL3008
 RUN apt-get update \
-    && apt-get dist-upgrade -y \
     && apt-get install -y --no-install-recommends \
         build-essential \
         libportaudio2 \
@@ -17,8 +18,29 @@ RUN apt-get update \
         python3-dev \
     && apt-get clean \
 	&& rm -fr /var/lib/apt/lists/* \
-	&& rm -fr /var/cache/apt/* \
-    && pip3 install -r requirements.txt \
-    && pip install -e .
+	&& rm -fr /var/cache/apt/*
 
-ENTRYPOINT ["python3", "tts_client_python/tts_client.py"]
+# hadolint ignore=DL3013
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir .
+
+
+FROM python:3.8-slim
+
+LABEL maintainer="Techmo sp. z o.o. <https://github.com/techmo-pl>"
+
+# hadolint ignore=DL3008
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libportaudio2 \
+    && apt-get clean \
+	&& rm -fr /var/lib/apt/lists/* \
+	&& rm -fr /var/cache/apt/*
+
+COPY --from=build-stage /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
+COPY --from=build-stage /tts-client-python/tts_client_python /tts-client-python/tts_client_python
+
+WORKDIR /tts-client-python
+
+COPY ./docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]

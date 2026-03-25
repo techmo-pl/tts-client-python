@@ -1,0 +1,3 @@
+[codespell]
+# Ignore Polish language words that codespell flags as misspellings
+ignore-words-list = tekst,numer,Tekst
