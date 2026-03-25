@@ -1,75 +1,116 @@
-from tts_client_python.proto import techmo_tts_pb2 as techmo_tts_pb2
-from tts_client_python.proto import techmo_tts_pb2_grpc as techmo_tts_pb2_grpc
+from __future__ import annotations
+
+from pathlib import Path
+
 import grpc
-import os
+from grpc import StatusCode
+
 from tts_client_python.general import GrpcRequestConfig
-import lxml.etree as etree
+from tts_client_python.proto import techmo_tts_pb2 as techmo_tts_pb2
 
 
-def delete_lexicon(args):
-
+def delete_lexicon(
+    service_address: str,
+    tls: bool,
+    tls_dir: str,
+    tls_ca_cert_file: str,
+    tls_cert_file: str,
+    tls_private_key_file: str,
+    session_id: str,
+    grpc_timeout: int,
+    lexicon_uri: str,
+) -> None:
     rc = GrpcRequestConfig(
-        service=args.service,
-        tls_directory=args.tls_directory,
-        grpc_timeout=args.grpc_timeout,
-        session_id=args.session_id,
+        service_address=service_address,
+        tls=tls,
+        tls_dir=tls_dir,
+        tls_ca_cert_file=tls_ca_cert_file,
+        tls_cert_file=tls_cert_file,
+        tls_private_key_file=tls_private_key_file,
+        session_id=session_id,
+        grpc_timeout=grpc_timeout,
     )
-    request = techmo_tts_pb2.DeleteLexiconRequest(name=args.lexicon_to_delete)
+    request = techmo_tts_pb2.DeleteLexiconRequest(uri=lexicon_uri)  # type: ignore[attr-defined]
 
     try:
         stub = rc.get_stub()
-        response = stub.DeleteLexicon(
-            request, timeout=rc.get_timeout(), metadata=rc.get_metadata()
-        )
-        print("\nLexicon: ", args.lexicon_to_delete, " has been deleted\n")
+        stub.DeleteLexicon(request, timeout=rc.get_timeout(), metadata=rc.get_metadata())
+        print("\nLexicon: ", lexicon_uri, " has been deleted\n")
     except grpc.RpcError as e:
-        print(
-            "[Server-side error] Received following RPC error from the TTS service:",
-            str(e),
-        )
+        if e.code() == StatusCode.NOT_FOUND:
+            print(f"[NOT FOUND] Lexicon '{lexicon_uri}' was not found. Use --list-lexicons to find available lexicons.")
+        else:
+            print(
+                "[Server-side error] Received following RPC error from the TTS service:",
+                str(e),
+            )
 
 
-def get_lexicon(args):
-
+def get_lexicon(
+    service_address: str,
+    tls: bool,
+    tls_dir: str,
+    tls_ca_cert_file: str,
+    tls_cert_file: str,
+    tls_private_key_file: str,
+    session_id: str,
+    grpc_timeout: int,
+    lexicon_uri: str,
+    output_path: str,
+) -> None:
     rc = GrpcRequestConfig(
-        service=args.service,
-        tls_directory=args.tls_directory,
-        grpc_timeout=args.grpc_timeout,
-        session_id=args.session_id,
+        service_address=service_address,
+        tls=tls,
+        tls_dir=tls_dir,
+        tls_ca_cert_file=tls_ca_cert_file,
+        tls_cert_file=tls_cert_file,
+        tls_private_key_file=tls_private_key_file,
+        session_id=session_id,
+        grpc_timeout=grpc_timeout,
     )
-    request = techmo_tts_pb2.GetLexiconRequest(name=args.lexicon_to_get)
+    request = techmo_tts_pb2.GetLexiconRequest(uri=lexicon_uri)  # type: ignore[attr-defined]
 
     try:
         stub = rc.get_stub()
-        response = stub.GetLexicon(
-            request, timeout=rc.get_timeout(), metadata=rc.get_metadata()
-        )
-        xml_parser = etree.XMLParser(remove_blank_text=True, recover=True)
-        x = etree.fromstring(response.content, parser=xml_parser)
-        print("\n---", args.lexicon_to_get, "---\n")
-        print(etree.tostring(x, pretty_print=True).decode())
+        response = stub.GetLexicon(request, timeout=rc.get_timeout(), metadata=rc.get_metadata())
+        with open(output_path, "w") as file:
+            file.write(response.content)
     except grpc.RpcError as e:
-        print(
-            "[Server-side error] Received following RPC error from the TTS service:",
-            str(e),
-        )
+        if e.code() == StatusCode.NOT_FOUND:
+            print(f"[NOT FOUND] Lexicon '{lexicon_uri}' was not found. Use --list-lexicons to find available lexicons.")
+        else:
+            print(
+                "[Server-side error] Received following RPC error from the TTS service:",
+                str(e),
+            )
 
 
-def list_lexicons(args):
-
+def list_lexicons(
+    service_address: str,
+    tls: bool,
+    tls_dir: str,
+    tls_ca_cert_file: str,
+    tls_cert_file: str,
+    tls_private_key_file: str,
+    session_id: str,
+    grpc_timeout: int,
+    language_code: str,
+) -> None:
     rc = GrpcRequestConfig(
-        service=args.service,
-        tls_directory=args.tls_directory,
-        grpc_timeout=args.grpc_timeout,
-        session_id=args.session_id,
+        service_address=service_address,
+        tls=tls,
+        tls_dir=tls_dir,
+        tls_ca_cert_file=tls_ca_cert_file,
+        tls_cert_file=tls_cert_file,
+        tls_private_key_file=tls_private_key_file,
+        session_id=session_id,
+        grpc_timeout=grpc_timeout,
     )
-    request = techmo_tts_pb2.ListLexiconsRequest(language=args.language)
+    request = techmo_tts_pb2.ListLexiconsRequest(language_code=language_code)  # type: ignore[attr-defined]
 
     try:
         stub = rc.get_stub()
-        response = stub.ListLexicons(
-            request, timeout=rc.get_timeout(), metadata=rc.get_metadata()
-        )
+        response = stub.ListLexicons(request, timeout=rc.get_timeout(), metadata=rc.get_metadata())
         print("\nAvailable lexicons:\n")
         print(response)
     except grpc.RpcError as e:
@@ -79,25 +120,55 @@ def list_lexicons(args):
         )
 
 
-def put_lexicon(args):
-
+def put_lexicon(
+    service_address: str,
+    tls: bool,
+    tls_dir: str,
+    tls_ca_cert_file: str,
+    tls_cert_file: str,
+    tls_private_key_file: str,
+    session_id: str,
+    grpc_timeout: int,
+    lexicon_uri: str,
+    lexicon_path: str,
+    outside_lookup_behaviour: str,
+) -> None:
     rc = GrpcRequestConfig(
-        service=args.service,
-        tls_directory=args.tls_directory,
-        grpc_timeout=args.grpc_timeout,
-        session_id=args.session_id,
+        service_address=service_address,
+        tls=tls,
+        tls_dir=tls_dir,
+        tls_ca_cert_file=tls_ca_cert_file,
+        tls_cert_file=tls_cert_file,
+        tls_private_key_file=tls_private_key_file,
+        session_id=session_id,
+        grpc_timeout=grpc_timeout,
     )
-    request = techmo_tts_pb2.PutLexiconRequest(
-        name=args.put_lexicon[0], content=args.put_lexicon[1]
+    lexicon_content = Path(lexicon_path).read_text()
+
+    outside_lookup = None
+    if outside_lookup_behaviour == "allowed":
+        outside_lookup = techmo_tts_pb2.OutsideLookupBehaviour.ALLOWED  # type: ignore[attr-defined]
+    elif outside_lookup_behaviour == "disallowed":
+        outside_lookup = techmo_tts_pb2.OutsideLookupBehaviour.DISALLOWED  # type: ignore[attr-defined]
+    else:
+        raise RuntimeError("Illegal value for OUTSIDE_LOOKUP_BEHAVIOUR")
+
+    request = techmo_tts_pb2.PutLexiconRequest(  # type: ignore[attr-defined]
+        uri=lexicon_uri,
+        content=lexicon_content,
+        outside_lookup_behaviour=outside_lookup,
     )
 
     try:
         stub = rc.get_stub()
         stub.PutLexicon(request, timeout=rc.get_timeout(), metadata=rc.get_metadata())
-        print("\nLexicon: ", args.put_lexicon[0], " has been added\n")
+        print("\nLexicon: ", lexicon_uri, " has been added\n")
 
     except grpc.RpcError as e:
-        print(
-            "[Server-side error] Received following RPC error from the TTS service:",
-            str(e),
-        )
+        if e.code() == StatusCode.NOT_FOUND:
+            print(f"[NOT FOUND] Lexicon '{lexicon_uri}' was not found. Use --list-lexicons to find available lexicons.")
+        else:
+            print(
+                "[Server-side error] Received following RPC error from the TTS service:",
+                str(e),
+            )

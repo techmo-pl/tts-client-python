@@ -1,0 +1,64 @@
+name: Tests
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install system dependencies
+        run: sudo apt-get install -y libportaudio2
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Generate proto stubs
+        run: |
+          uv venv .venv
+          source .venv/bin/activate
+          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0"
+          PYTHONPATH=. python setup.py build_grpc
+
+      - name: Run tests via tox
+        run: |
+          TOXENV="py$(echo '${{ matrix.python-version }}' | tr -d '.')"
+          uvx --with "tox-uv>=1" tox -e "${TOXENV}"
+
+  test-py314:
+    name: Python 3.14 (allowed failure)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install system dependencies
+        run: sudo apt-get install -y libportaudio2
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Generate proto stubs
+        run: |
+          uv venv .venv
+          source .venv/bin/activate
+          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0"
+          PYTHONPATH=. python setup.py build_grpc
+
+      - name: Run tests via tox
+        run: uvx --with "tox-uv>=1" tox -e py314
