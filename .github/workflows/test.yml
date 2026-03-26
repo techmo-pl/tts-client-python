@@ -25,12 +25,14 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
+        with:
+          cache-dependency-glob: "pyproject.toml"
 
       - name: Generate proto stubs
         run: |
           uv venv .venv
           source .venv/bin/activate
-          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0"
+          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0" setuptools
           PYTHONPATH=. python setup.py build_grpc
 
       - name: Run tests via tox
@@ -53,12 +55,14 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
+        with:
+          cache-dependency-glob: "pyproject.toml"
 
       - name: Generate proto stubs
         run: |
           uv venv .venv
           source .venv/bin/activate
-          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0"
+          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0" setuptools
           PYTHONPATH=. python setup.py build_grpc
 
       - name: Run tests via tox
