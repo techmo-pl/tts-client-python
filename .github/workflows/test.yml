@@ -30,7 +30,7 @@ jobs:
         run: |
           uv venv .venv
           source .venv/bin/activate
-          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0"
+          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0" setuptools
           PYTHONPATH=. python setup.py build_grpc
 
       - name: Run tests via tox
@@ -58,7 +58,7 @@ jobs:
         run: |
           uv venv .venv
           source .venv/bin/activate
-          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0"
+          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0" setuptools
           PYTHONPATH=. python setup.py build_grpc
 
       - name: Run tests via tox
