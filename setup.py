@@ -31,8 +31,7 @@ setup(
         "grpcio>=1.70.0,<2.0.0; python_version>='3.9'",
         "grpcio>=1.70.0,<1.71.0; python_version=='3.8'",
         # Pre-built gRPC stubs for the Techmo TTS API.
-        # Switch to "tts-api>=3.2.1" once published to PyPI.
-        "tts-api @ git+https://github.com/techmo-pl/tts-api-python.git",
+        "tts-api @ git+https://github.com/techmo-pl/tts-api-python.git@v3.2.1",
         "lxml>=4.6.4",
         "numpy>=1.19.5",
         "sounddevice>=0.4.0",

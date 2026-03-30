@@ -55,8 +55,8 @@ Integration tests are excluded by default (`pytest.ini`). They require a running
 Python 3.8 requires tighter bounds:
 - `grpcio>=1.70.0,<1.71.0` (3.8) vs `grpcio>=1.70.0,<2.0` (3.9+)
 
-`tts-api` currently installed from git (`git+https://github.com/techmo-pl/tts-api-python.git`).
-Switch to `tts-api>=3.2.1` in `setup.py` once published to PyPI.
+`tts-api` is pinned to a GitHub tag: `git+https://github.com/techmo-pl/tts-api-python.git@vX.Y.Z`.
+Update the tag in `setup.py` when a new `tts-api-python` release is tagged.
 
 Do not widen grpcio bounds without verifying Python 3.8 compatibility.
 
