@@ -40,7 +40,7 @@ from techmo.tts.api.v3 import techmo_tts_pb2, techmo_tts_pb2_grpc
 
 `tts-api` is pinned to a GitHub tag in `setup.py`:
 ```
-tts-api @ git+https://github.com/techmo-pl/tts-api-python.git@vX.Y.Z
+tts-api @ git+https://github.com/techmo-pl/tts-api-python.git@v3.2.1
 ```
 Update the tag in `setup.py` when a new `tts-api-python` release is tagged.
 
@@ -95,4 +95,4 @@ No `.gitlab-ci.yml` — CI runs only on GitHub Actions.
 | Package | Python 3.8 | Python 3.9+ |
 |---------|-----------|-------------|
 | grpcio | `>=1.70.0,<1.71.0` | `>=1.70.0,<2.0` |
-| tts-api | `@ git+https://github.com/techmo-pl/tts-api-python.git@vX.Y.Z` | same |
+| tts-api | `@ git+https://github.com/techmo-pl/tts-api-python.git@v3.2.1` | same |

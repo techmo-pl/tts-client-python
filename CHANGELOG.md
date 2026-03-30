@@ -1,6 +1,6 @@
 # Techmo TTS gRPC Python client Changelog
 
-## [3.2.8+1] - 2026-03-30
+## [3.2.9] - 2026-03-30
 
 ### Changed
 - Replace local proto generation with `tts-api` package dependency (`git+https://github.com/techmo-pl/tts-api-python.git@v3.2.1`).
