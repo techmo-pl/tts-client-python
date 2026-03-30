@@ -8,7 +8,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-IMAGE_VERSION=3.2.12
+IMAGE_VERSION=3.2.9
 
 SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "${SCRIPT}")

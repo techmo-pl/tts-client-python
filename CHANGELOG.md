@@ -1,52 +1,19 @@
 # Techmo TTS gRPC Python client Changelog
 
-## [3.2.12] - 2026-03-30
-
-### Fixed
-
-- `README.md`: fix `--input-text-file` → `--input-path` in Docker usage example.
-- `README.md`: fix `--sampling-rate` → `--sampling-rate-hz` in options table.
-- `README.md`: fix `--language` → `--language-code` in recording/sound-icon option descriptions.
-- `README.md`: add missing TLS options (`--tls`, `--tls-ca-cert-file`, `--tls-cert-file`,
-  `--tls-private-key-file`) and `--max-frame-size` to the options table.
-- `README.md`: remove references to non-existent `doc/dev-guide.md`.
-- `docker/run.sh`: update `IMAGE_VERSION` from `3.2.8` to `3.2.12`.
-
-
-## [3.2.11] - 2026-03-30
-
-### Fixed
-
-- `Dockerfile`: remove stale `COPY submodules/tts-service-api` line (submodule no longer exists).
-- `mypy.ini`: remove obsolete `[mypy-tts_client_python.proto.*]` exclusion rule.
-- `README.md`: remove references to submodule init and local proto stubs; reflect that stubs
-  come from the `tts-api` dependency.
-
-
-## [3.2.10] - 2026-03-30
-
-### Fixed
-
-- `install.sh`: replace `ldconfig -p` with `dpkg-query` as the primary check for `libportaudio2`.
-  Fixes false "not found" warning when the library is installed but the linker cache is stale.
-  Falls back to `ldconfig -p` on non-Debian systems.
-
-
 ## [3.2.9] - 2026-03-30
 
 ### Changed
-- Replace local proto generation with `tts-api` package dependency (`git+https://github.com/techmo-pl/tts-api-python.git@v3.2.1`).
-  No proto submodule, no `setup.py build_grpc` step required.
-- All imports updated from `tts_client_python.proto` to `techmo.tts.api.v3`.
-- `setup.py`: remove 5 custom build command classes; add `tts-api` to `install_requires`.
-- `pyproject.toml`: remove `grpcio-tools` build dependency.
-- `setup.sh`: remove submodule init (pre-commit hooks only).
-- `install.sh`: remove proto sentinel check.
-- `tox.ini`: switch to `skip_install=false`, `extras=test`; remove manual dep list.
-- `.github/workflows/test.yml`: remove submodule checkout and `build_grpc` step.
 
-### Added
-- `AGENTS.md`: updated to reflect new architecture (no submodule, tts-api dependency).
+- Switch from local proto generation to the `tts-api` package dependency.
+  No proto submodule and no `build_grpc` step required anymore — run `./install.sh` and you're ready.
+
+### Fixed
+
+- `install.sh`: false "libportaudio2 not found" warning no longer appears when the library
+  is installed (switched from stale `ldconfig` cache check to `dpkg-query`).
+- `README.md`: corrected several wrong CLI option names (`--input-path`, `--sampling-rate-hz`,
+  `--language-code`) and added missing TLS options and `--max-frame-size` to the options table.
+- `docker/run.sh`: updated bundled image version reference.
 
 
 ## [3.2.8] - 2026-03-25
