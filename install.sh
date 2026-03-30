@@ -25,7 +25,7 @@ fi
 source "${VENV_PATH}/bin/activate"
 uv pip install -e ".[test]"
 
-if ! ldconfig -p 2> /dev/null | grep -q 'libportaudio'; then
+if ! { dpkg-query -W -f='${Status}' libportaudio2 2>/dev/null | grep -q 'install ok installed' || ldconfig -p 2>/dev/null | grep -q 'libportaudio'; }; then
     echo "" >&2
     echo "Warning: libportaudio2 not found on this system." >&2
     echo "  Install it with: sudo apt-get install libportaudio2" >&2

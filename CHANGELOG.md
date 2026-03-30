@@ -1,5 +1,14 @@
 # Techmo TTS gRPC Python client Changelog
 
+## [3.2.10] - 2026-03-30
+
+### Fixed
+
+- `install.sh`: replace `ldconfig -p` with `dpkg-query` as the primary check for `libportaudio2`.
+  Fixes false "not found" warning when the library is installed but the linker cache is stale.
+  Falls back to `ldconfig -p` on non-Debian systems.
+
+
 ## [3.2.9] - 2026-03-30
 
 ### Changed
