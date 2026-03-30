@@ -52,7 +52,7 @@ The generated audio file will appear in the `tts-client-python/docker/audio` dir
 
 To synthesize speech from a text file, place it in the `tts-client-python/docker/txt` directory and execute the command:
 ```
-./run.sh --service-address=IP_ADDRESS:PORT --input-text-file /tts_client/txt/FILE_NAME.txt
+./run.sh --service-address=IP_ADDRESS:PORT --input-path /tts_client/txt/FILE_NAME.txt
 ```
 
 To use an encrypted connection, place the tls certificates received from the service owner in the `tts-client-python/docker/tls` directory and execute the command:
@@ -65,7 +65,7 @@ To print a complete list of available options, use:
 ./run.sh --help
 ```
 
-For more information on building and using the docker image, see `doc/dev-guide.md` file.
+
 
 
 ## Local instance usage
@@ -121,11 +121,9 @@ Three independent blockers make Python 3.7 support impractical:
 
 Python 3.7 also reached end-of-life in June 2023.
 
-For more information on requirements and setup, see `doc/dev-guide.md` file.
-
 ### Setup
 
-To initialise submodules and install pre-commit hooks, run once after cloning:
+To install pre-commit hooks, run once after cloning:
 ```
 ./setup.sh
 ```
@@ -160,11 +158,15 @@ python3 tts_client_python/tts_client.py --service-address=IP_ADDRESS:PORT --text
 |  -o OUT_PATH, --out-path OUT_PATH                                | A path to output audio file with synthesized speech content.|
 |  -l LANGUAGE_CODE, --language-code LANGUAGE_CODE                 | Language ISO 639-1 code of the voice to be used (optional, can be overridden by SSML).|
 |  -r RESPONSE_TYPE, --response RESPONSE_TYPE                      | Sets the type of response. Allowed values: "streaming" (default) or "single". According to the set response type, the streaming or non-streaming version of the Synthesize call is used.|
-|  --tls-dir TLS_DIR                                               | If set to a path to the directory containing SSL/TLS files (client.crt, client.key, ca.crt), uses SSL/TLS authentication (required for both one-way and mutual authentication). If not set, uses insecure connection.|
+|  --tls                                                           | Enables simple one-way TLS using root certificates from the default gRPC location. Cannot be combined with other `--tls-*` options.|
+|  --tls-dir TLS_DIR                                               | Path to a directory with TLS credential files (ca.crt, client.crt, client.key). Selects one-way or mutual TLS depending on files present. Alternative to the individual `--tls-*-file` options.|
+|  --tls-ca-cert-file FILE                                         | Path to x509 CA Certificate file for server authentication.|
+|  --tls-cert-file FILE                                            | Path to x509 client certificate for mutual TLS. Must be used together with `--tls-private-key-file`.|
+|  --tls-private-key-file FILE                                     | Path to x509 private key matching `--tls-cert-file`. Must be used together with `--tls-cert-file`.|
 |  --play                                                          | Plays synthesized audio. Works only with pcm16 (default) encoding.|
 |  --session-id SESSION_ID                                         | A session ID to be passed to the service. If not specified, the service generates a default session ID based on the timestamp of the request (in the form of: 'YYYYMMDD-hhmmss-xxx', where 'xxx' is the counter of sessions handled during the indicated second).|
 |  --grpc-timeout GRPC_TIMEOUT                                     | A timeout in milliseconds used to set gRPC deadline - how long the client is willing to wait for a reply from the server (optional).|
-|  --sampling-rate SAMPLING_RATE                                   | A sampling rate in Hz of synthesized audio. Set to 0 (default) to use voice's native sampling rate.|
+|  --sampling-rate-hz SAMPLING_RATE                                | A sampling rate in Hz of synthesized audio. Set to 0 (default) to use voice's native sampling rate.|
 |  --ae ENCODING, --audio-encoding ENCODING                        | An encoding of the output audio, pcm16 (default), ogg-vorbis, ogg-opus, a-law, or mu-law.|
 |  --speech-pitch SPEECH_PITCH                                     | Allows adjusting the default pitch of the synthesized speech (optional, can be overridden by SSML).|
 |  --speech-range SPEECH_RANGE                                     | Allows adjusting the default range of the synthesized speech (optional, can be overridden by SSML).|
@@ -176,11 +178,12 @@ python3 tts_client_python/tts_client.py --service-address=IP_ADDRESS:PORT --text
 |  --vg VOICE_GENDER, --voice-gender VOICE_GENDER                  | A gender of the voice to be used. Allowed values: 'female', 'male' (optional, can be overridden by SSML).|
 |  --va VOICE_AGE, --voice-age VOICE_AGE                           | An age of the voice to be used. Allowed values: 'adult', 'child', 'senile' (optional, can be overridden by SSML).|
 |  --voice-variant VOICE_VARIANT                                   | A variant of the selected voice - positive integer (optional, can be overridden by SSML). Default value is 1.|
-|  --list-sound-icons                                              | Lists all available sound icons for the requested voice. This request requires also arguments: --voice-name and --language, and may optionally specify --voice-variant (if not specified, the default variant (1) is used).|
-|  --list-recordings                                               | Lists all available recordings for the requested voice. This request requires also arguments: --voice-name and --language, and may optionally specify --voice-variant (if not specified, the default variant (1) is used).|
-|  --get-recording RECORDING_KEY OUTPUT_PATH                       | Sends back the recording with the requested key for the requested voice in the linear PCM16 format. This request requires also arguments: --voice-name and --language, and may optionally specify --voice-variant (if not specified, the default variant (1) is used).|
-|  --put-recording RECORDING_KEY AUDIO_PATH                        | Adds a new recording with the requested key for the requested voice, or overwrites the existing one if there is already such a key defined. The recording has to be PCM16 WAV audio. This request requires also arguments: --voice-name and --language, and may optionally specify --voice-variant (if not specified, the default variant (1) is used).|
-|  --delete-recording RECORDING_KEY                                | Removes the recording with the requested key from the list of recordings of the requested voice. This request requires also arguments: --voice-name and --language, and may optionally specify --voice-variant (if not specified, the default variant (1) is used).|
+|  --max-frame-size MAX_FRAME_SIZE                                  | Maximum frame size for RTF throttling. Optional, 0 (default) disables RTF throttling.|
+|  --list-sound-icons                                              | Lists all available sound icons for the requested voice. This request requires also arguments: --voice-name and --language-code, and may optionally specify --voice-variant (if not specified, the default variant (1) is used).|
+|  --list-recordings                                               | Lists all available recordings for the requested voice. This request requires also arguments: --voice-name and --language-code, and may optionally specify --voice-variant (if not specified, the default variant (1) is used).|
+|  --get-recording RECORDING_KEY OUTPUT_PATH                       | Sends back the recording with the requested key for the requested voice in the linear PCM16 format. This request requires also arguments: --voice-name and --language-code, and may optionally specify --voice-variant (if not specified, the default variant (1) is used).|
+|  --put-recording RECORDING_KEY AUDIO_PATH                        | Adds a new recording with the requested key for the requested voice, or overwrites the existing one if there is already such a key defined. The recording has to be PCM16 WAV audio. This request requires also arguments: --voice-name and --language-code, and may optionally specify --voice-variant (if not specified, the default variant (1) is used).|
+|  --delete-recording RECORDING_KEY                                | Removes the recording with the requested key from the list of recordings of the requested voice. This request requires also arguments: --voice-name and --language-code, and may optionally specify --voice-variant (if not specified, the default variant (1) is used).|
 |  --list-lexicons                                                 | Lists all available pronunciation lexicons.|
 |  --get-lexicon LEXICON_URI OUTPUT_PATH                           | Saves content of the lexicon from the service-wide list of lexicon.|
 |  --put-lexicon LEXICON_URI LEXICON_PATH OUTSIDE_LOOKUP_BEHAVIOUR | Adds lexicon to the service-wide list of lexicons. LEXICON_URI - a custom string identifying a given lexicon at the service level. LEXICON_PATH - path to the lexicon file. OUTSIDE_LOOKUP_BEHAVIOUR - determines whether the service can use the lexicon automatically, without using the SSML <lookup> tag. Must take one of two values: 'allowed' or 'disallowed'.|
@@ -221,7 +224,7 @@ python3 tts_client_python/tts_client.py --service-address "SERVICE_HOST:SERVICE_
 
 ### Running tests locally
 
-Proto stubs (`tts_client_python/proto/*_pb2.py`) are **not committed** to git.
+Proto stubs are provided by the `tts-api` dependency and installed automatically.
 Run the following once after cloning, then activate the venv and run tests:
 
 ```bash
@@ -231,10 +234,10 @@ source .venv/bin/activate
 pytest
 ```
 
-> **Note on scripts:** `setup.sh` is a one-time bootstrapper (submodules +
-> pre-commit hooks). `install.sh [VENV_PATH]` creates the virtualenv and
-> installs the package — run it separately after `setup.sh`, or re-run it
-> whenever you need to refresh the Python environment.
+> **Note on scripts:** `setup.sh` is a one-time bootstrapper (pre-commit hooks).
+> `install.sh [VENV_PATH]` creates the virtualenv and installs the package —
+> run it separately after `setup.sh`, or re-run it whenever you need to refresh
+> the Python environment.
 
 > **Multi-version testing** (optional): to run the full matrix across Python
 > 3.8–3.14 (mirrors CI), run `uvx --with "tox-uv>=1" tox` instead of `pytest`

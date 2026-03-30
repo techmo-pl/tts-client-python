@@ -1,5 +1,28 @@
 # Techmo TTS gRPC Python client Changelog
 
+## [3.2.12] - 2026-03-30
+
+### Fixed
+
+- `README.md`: fix `--input-text-file` → `--input-path` in Docker usage example.
+- `README.md`: fix `--sampling-rate` → `--sampling-rate-hz` in options table.
+- `README.md`: fix `--language` → `--language-code` in recording/sound-icon option descriptions.
+- `README.md`: add missing TLS options (`--tls`, `--tls-ca-cert-file`, `--tls-cert-file`,
+  `--tls-private-key-file`) and `--max-frame-size` to the options table.
+- `README.md`: remove references to non-existent `doc/dev-guide.md`.
+- `docker/run.sh`: update `IMAGE_VERSION` from `3.2.8` to `3.2.12`.
+
+
+## [3.2.11] - 2026-03-30
+
+### Fixed
+
+- `Dockerfile`: remove stale `COPY submodules/tts-service-api` line (submodule no longer exists).
+- `mypy.ini`: remove obsolete `[mypy-tts_client_python.proto.*]` exclusion rule.
+- `README.md`: remove references to submodule init and local proto stubs; reflect that stubs
+  come from the `tts-api` dependency.
+
+
 ## [3.2.10] - 2026-03-30
 
 ### Fixed
