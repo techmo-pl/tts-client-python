@@ -8,8 +8,8 @@ import grpc
 import numpy as np
 import sounddevice as sd
 
-from tts_client_python.proto import techmo_tts_pb2 as techmo_tts_pb2
-from tts_client_python.proto import techmo_tts_pb2_grpc as techmo_tts_pb2_grpc
+from techmo.tts.api.v3 import techmo_tts_pb2
+from techmo.tts.api.v3 import techmo_tts_pb2_grpc
 from tts_client_python.wave_utils import AudioFormat, write_wave_file
 
 

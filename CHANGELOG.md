@@ -1,5 +1,22 @@
 # Techmo TTS gRPC Python client Changelog
 
+## [3.2.8+1] - 2026-03-30
+
+### Changed
+- Replace local proto generation with `tts-api` package dependency (`git+https://github.com/techmo-pl/tts-api-python.git@v3.2.1`).
+  No proto submodule, no `setup.py build_grpc` step required.
+- All imports updated from `tts_client_python.proto` to `techmo.tts.api.v3`.
+- `setup.py`: remove 5 custom build command classes; add `tts-api` to `install_requires`.
+- `pyproject.toml`: remove `grpcio-tools` build dependency.
+- `setup.sh`: remove submodule init (pre-commit hooks only).
+- `install.sh`: remove proto sentinel check.
+- `tox.ini`: switch to `skip_install=false`, `extras=test`; remove manual dep list.
+- `.github/workflows/test.yml`: remove submodule checkout and `build_grpc` step.
+
+### Added
+- `AGENTS.md`: updated to reflect new architecture (no submodule, tts-api dependency).
+
+
 ## [3.2.8] - 2026-03-25
 
 ### Fixed
