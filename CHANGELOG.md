@@ -1,5 +1,21 @@
 # Techmo TTS gRPC Python client Changelog
 
+## [3.2.9] - 2026-03-30
+
+### Changed
+
+- Switch from local proto generation to the `tts-api` package dependency.
+  No proto submodule and no `build_grpc` step required anymore — run `./install.sh` and you're ready.
+
+### Fixed
+
+- `install.sh`: false "libportaudio2 not found" warning no longer appears when the library
+  is installed (switched from stale `ldconfig` cache check to `dpkg-query`).
+- `README.md`: corrected several wrong CLI option names (`--input-path`, `--sampling-rate-hz`,
+  `--language-code`) and added missing TLS options and `--max-frame-size` to the options table.
+- `docker/run.sh`: updated bundled image version reference.
+
+
 ## [3.2.8] - 2026-03-25
 
 ### Fixed
