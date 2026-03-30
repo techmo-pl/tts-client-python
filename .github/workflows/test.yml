@@ -17,8 +17,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Install system dependencies
         run: sudo apt-get install -y libportaudio2
@@ -27,13 +25,6 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           cache-dependency-glob: "pyproject.toml"
-
-      - name: Generate proto stubs
-        run: |
-          uv venv .venv
-          source .venv/bin/activate
-          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0" setuptools
-          PYTHONPATH=. python setup.py build_grpc
 
       - name: Run tests via tox
         run: |
@@ -47,8 +38,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Install system dependencies
         run: sudo apt-get install -y libportaudio2
@@ -57,13 +46,6 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           cache-dependency-glob: "pyproject.toml"
-
-      - name: Generate proto stubs
-        run: |
-          uv venv .venv
-          source .venv/bin/activate
-          uv pip install --quiet "grpcio-tools>=1.70.0,<1.71.0" setuptools
-          PYTHONPATH=. python setup.py build_grpc
 
       - name: Run tests via tox
         run: uvx --with "tox-uv>=1" tox -e py314

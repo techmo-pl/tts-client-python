@@ -1,3 +1,0 @@
-[submodule "submodules/tts-service-api"]
-	path = submodules/tts-service-api
-	url = https://github.com/techmo-pl/tts-service-api

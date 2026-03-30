@@ -7,7 +7,7 @@ import struct
 import pytest
 
 from tts_client_python.general import AudioSaver
-from tts_client_python.proto import techmo_tts_pb2
+from techmo.tts.api.v3 import techmo_tts_pb2
 from tts_client_python.wave_utils import AudioFormat, write_wave_file
 
 
