@@ -7,25 +7,25 @@ Python gRPC client for Techmo's Text-to-Speech service. Provides a CLI (`tts_cli
 - **Package:** `tts_client_python`
 - **Version:** tracked in `tts_client_python/VERSION.py`
 - **Python support:** 3.8–3.14
-- **gRPC API proto:** `submodules/tts-service-api/proto/techmo_tts.proto`
+- **gRPC API stubs:** provided by the `tts-api` package (`techmo.tts.api.v3` namespace)
 
 ## Dev Environment Setup
 
 ```bash
-./setup.sh          # one-time: init submodules + pre-commit hooks
+./setup.sh          # one-time: install pre-commit hooks
 ./install.sh        # creates .venv and installs package with test deps (uv required)
 source .venv/bin/activate
 ```
 
-`setup.sh` — submodules + pre-commit only. `install.sh` — venv + pip only. Never mix these concerns.
+`setup.sh` — pre-commit only. `install.sh` — venv + pip only. Never mix these concerns.
 
 System dependency: `sudo apt-get install libportaudio2` (needed by sounddevice; missing it produces a warning but tests still run — conftest handles the absence gracefully).
 
 ## Proto Stubs
 
-Generated files (`tts_client_python/proto/*_pb2.py`, `*_pb2_grpc.py`) are **never committed**.
-Generate manually: `python setup.py build_grpc`
-They are regenerated automatically during `uv pip install -e ".[test]"`.
+Stubs are provided by the `tts-api` dependency (package `tts-api-python` on GitHub).
+Import them as: `from techmo.tts.api.v3 import techmo_tts_pb2, techmo_tts_pb2_grpc`
+No manual generation required. No proto submodule.
 
 ## Key Source Files
 
@@ -54,19 +54,19 @@ Integration tests are excluded by default (`pytest.ini`). They require a running
 
 Python 3.8 requires tighter bounds:
 - `grpcio>=1.70.0,<1.71.0` (3.8) vs `grpcio>=1.70.0,<2.0` (3.9+)
-- `protobuf>=5.29.0,<6.0` (3.8) vs `protobuf>=5.29.0` (3.9+)
-- `grpcio-tools>=1.70.0,<1.71.0` in `pyproject.toml` (build dep)
 
-Do not widen these bounds without verifying Python 3.8 compatibility.
+`tts-api` currently installed from git (`git+https://github.com/techmo-pl/tts-api-python.git`).
+Switch to `tts-api>=3.2.1` in `setup.py` once published to PyPI.
+
+Do not widen grpcio bounds without verifying Python 3.8 compatibility.
 
 ## CI — GitHub Actions
 
 `.github/workflows/test.yml` runs a matrix across Python 3.8–3.13 (required) and 3.14 (allowed failure). Each job:
-1. Checks out with submodules
+1. Checks out (no submodules)
 2. Installs `libportaudio2`
 3. Installs `uv`
-4. Generates proto stubs: `python setup.py build_grpc`
-5. Runs tox
+4. Runs tox (which installs the package including `tts-api`)
 
 ## Versioning
 

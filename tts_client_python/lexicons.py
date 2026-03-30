@@ -6,7 +6,7 @@ import grpc
 from grpc import StatusCode
 
 from tts_client_python.general import GrpcRequestConfig
-from tts_client_python.proto import techmo_tts_pb2 as techmo_tts_pb2
+from techmo.tts.api.v3 import techmo_tts_pb2
 
 
 def delete_lexicon(

@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from tts_client_python.general import create_out_path, create_voice, get_audio_encoding, prepare_synthesis_config
-from tts_client_python.proto import techmo_tts_pb2
+from techmo.tts.api.v3 import techmo_tts_pb2
 
 
 class TestGetAudioEncoding:
