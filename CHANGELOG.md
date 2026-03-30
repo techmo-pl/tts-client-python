@@ -1,5 +1,15 @@
 # Techmo TTS gRPC Python client Changelog
 
+## [3.2.11] - 2026-03-30
+
+### Fixed
+
+- `Dockerfile`: remove stale `COPY submodules/tts-service-api` line (submodule no longer exists).
+- `mypy.ini`: remove obsolete `[mypy-tts_client_python.proto.*]` exclusion rule.
+- `README.md`: remove references to submodule init and local proto stubs; reflect that stubs
+  come from the `tts-api` dependency.
+
+
 ## [3.2.10] - 2026-03-30
 
 ### Fixed

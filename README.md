@@ -125,7 +125,7 @@ For more information on requirements and setup, see `doc/dev-guide.md` file.
 
 ### Setup
 
-To initialise submodules and install pre-commit hooks, run once after cloning:
+To install pre-commit hooks, run once after cloning:
 ```
 ./setup.sh
 ```
@@ -221,7 +221,7 @@ python3 tts_client_python/tts_client.py --service-address "SERVICE_HOST:SERVICE_
 
 ### Running tests locally
 
-Proto stubs (`tts_client_python/proto/*_pb2.py`) are **not committed** to git.
+Proto stubs are provided by the `tts-api` dependency and installed automatically.
 Run the following once after cloning, then activate the venv and run tests:
 
 ```bash
@@ -231,10 +231,10 @@ source .venv/bin/activate
 pytest
 ```
 
-> **Note on scripts:** `setup.sh` is a one-time bootstrapper (submodules +
-> pre-commit hooks). `install.sh [VENV_PATH]` creates the virtualenv and
-> installs the package — run it separately after `setup.sh`, or re-run it
-> whenever you need to refresh the Python environment.
+> **Note on scripts:** `setup.sh` is a one-time bootstrapper (pre-commit hooks).
+> `install.sh [VENV_PATH]` creates the virtualenv and installs the package —
+> run it separately after `setup.sh`, or re-run it whenever you need to refresh
+> the Python environment.
 
 > **Multi-version testing** (optional): to run the full matrix across Python
 > 3.8–3.14 (mirrors CI), run `uvx --with "tox-uv>=1" tox` instead of `pytest`

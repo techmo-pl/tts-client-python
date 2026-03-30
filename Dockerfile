@@ -3,7 +3,6 @@ FROM python:3.8-slim AS build-stage
 ARG DEBIAN_FRONTEND=noninteractive
 ENV PIP_ROOT_USER_ACTION=ignore
 
-COPY submodules/tts-service-api /tts-client-python/submodules/tts-service-api
 COPY tts_client_python /tts-client-python/tts_client_python
 COPY setup.py pyproject.toml README.md /tts-client-python/
 
