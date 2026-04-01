@@ -1,5 +1,19 @@
 # Techmo TTS gRPC Python client Changelog
 
+## [3.2.10] - 2026-04-01
+
+### Fixed
+
+- `setup.py`: raised `grpcio` lower bound to `>=1.80.0` for Python 3.9+.
+  `grpcio` skips the `1.79.x` series (releases jump `1.78.0` → `1.80.0`);
+  environments combining this package with `livekit-agents>=1.5.1` fail at
+  runtime with `grpcio 1.78.x`. Python 3.8 constraint unchanged.
+- `setup.py`: pinned `tts-api` dependency to `v3.2.2` which carries the same
+  grpcio lower-bound fix upstream.
+- `.github/workflows/test.yml`: fixed `cache-dependency-glob` pointing at
+  non-existent `pyproject.toml` — changed to `setup.py`.
+
+
 ## [3.2.9] - 2026-03-30
 
 ### Changed
