@@ -28,10 +28,13 @@ setup(
     install_requires=[
         # gRPC stubs come from tts-api; grpcio is also needed directly for channel creation.
         # grpcio 1.71.0 dropped Python 3.8; keep <1.71.0 for 3.8 compatibility.
-        "grpcio>=1.70.0,<2.0.0; python_version>='3.9'",
+        # grpcio 1.80.0 is the minimum for Python 3.9+: grpcio skips 1.79.x, and
+        # environments combining tts-api with livekit-agents fail at runtime with 1.78.x
+        # due to livekit-agents' transitive stubs requiring grpcio>=1.80.0.
+        "grpcio>=1.80.0,<2.0.0; python_version>='3.9'",
         "grpcio>=1.70.0,<1.71.0; python_version=='3.8'",
         # Pre-built gRPC stubs for the Techmo TTS API.
-        "tts-api @ git+https://github.com/techmo-pl/tts-api-python.git@v3.2.1",
+        "tts-api @ git+https://github.com/techmo-pl/tts-api-python.git@v3.2.2",
         "lxml>=4.6.4",
         "numpy>=1.19.5",
         "sounddevice>=0.4.0",
