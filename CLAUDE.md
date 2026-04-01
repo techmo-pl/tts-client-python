@@ -53,7 +53,7 @@ Integration tests are excluded by default (`pytest.ini`). They require a running
 ## Dependency Constraints
 
 Python 3.8 requires tighter bounds:
-- `grpcio>=1.70.0,<1.71.0` (3.8) vs `grpcio>=1.80.0,<2.0` (3.9+)
+- `grpcio>=1.70.0,<1.71.0` (3.8) vs `grpcio>=1.80.0,<2.0.0` (3.9+)
 
 The 3.9+ lower bound is `1.80.0` (not `1.70.0`) because grpcio skips `1.79.x` and environments
 combining tts-api with `livekit-agents>=1.5.1` fail at runtime with `1.78.x`.
