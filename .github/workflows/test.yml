@@ -24,7 +24,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          cache-dependency-glob: "pyproject.toml"
+          cache-dependency-glob: "setup.py"
 
       - name: Run tests via tox
         run: |
@@ -45,7 +45,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          cache-dependency-glob: "pyproject.toml"
+          cache-dependency-glob: "setup.py"
 
       - name: Run tests via tox
         run: uvx --with "tox-uv>=1" tox -e py314
